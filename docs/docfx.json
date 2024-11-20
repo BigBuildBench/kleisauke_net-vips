@@ -1,0 +1,71 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "files": [
+            "**/*.csproj"
+          ],
+          "exclude": [
+            "**/obj/**",
+            "**/bin/**"
+          ],
+          "src": "../src"
+        }
+      ],
+      "dest": "obj/temp/api",
+      "properties": {
+        "TargetFramework": "netstandard2.0"
+      }
+    }
+  ],
+  "build": {
+    "content": [
+      {
+        "files": [ "**/*.yml" ],
+        "src": "obj/temp/api",
+        "dest": "api"
+      },
+      {
+        "files": "CHANGELOG.md",
+        "src": ".."
+      },
+      {
+        "files": "CHANGELOG.native.md",
+        "src": ".."
+      },
+      {
+        "files": [
+          "*.{md,yml}"
+        ],
+        "exclude": [
+          "obj/**",
+          "_site/**"
+        ]
+      }
+    ],
+    "resource": [
+      {
+        "files": [
+          "images/**"
+        ],
+        "exclude": [
+          "obj/**",
+          "_site/**"
+        ]
+      }
+    ],
+    "globalMetadata": {
+      "_disableContribution": true,
+      "_gitContribute": {
+        "branch": "master"
+      }
+    },
+    "dest": "_site",
+    "markdownEngineName": "markdig",
+    "template": [
+      "default",
+      "custom_template"
+    ]
+  }
+}

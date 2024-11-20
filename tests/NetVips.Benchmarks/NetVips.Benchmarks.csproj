@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\build\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <Optimize>true</Optimize>
+    <Platforms>x64;x86;ARM64;ARM32</Platforms>
+    <DefineConstants>$(DefineConstants);$(OS)</DefineConstants>
+    <DefineConstants Condition="'$(UseGlobalLibvips)' == 'true'">$(DefineConstants);GLOBAL_VIPS</DefineConstants>
+  </PropertyGroup>
+
+  <!-- By default we benchmark with the released NuGet binaries. -->
+  <PropertyGroup Condition="'$(UseGlobalLibvips)' == ''">
+    <UseGlobalLibvips>false</UseGlobalLibvips>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="images\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ContentWithTargetPath Include="images\sample2.v">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>sample2.v</TargetPath>
+    </ContentWithTargetPath>
+
+	<None Include="$(OutDir)\t.*">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  <Link>%(Filename)%(Extension)</Link>
+	  <Visible>False</Visible>
+	</None>
+  </ItemGroup>
+
+</Project>

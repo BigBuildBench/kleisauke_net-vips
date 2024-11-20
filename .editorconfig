@@ -1,0 +1,30 @@
+# This file is for unifying the coding style for different editors and IDEs
+# editorconfig.org
+
+# This file is the top-most EditorConfig file
+root = true
+
+# All files
+[*]
+indent_style = space
+indent_size = 4
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+
+[*.cs]
+
+# CS0728: Possibly incorrect assignment to local which is the argument to a using or lock statement
+dotnet_diagnostic.CS0728.severity = none
+
+[build/*.cs]
+dotnet_style_qualification_for_field = false:warning
+dotnet_style_qualification_for_property = false:warning
+dotnet_style_qualification_for_method = false:warning
+dotnet_style_qualification_for_event = false:warning
+dotnet_style_require_accessibility_modifiers = never:warning
+
+csharp_style_expression_bodied_methods = true:silent
+csharp_style_expression_bodied_properties = true:warning
+csharp_style_expression_bodied_indexers = true:warning
+csharp_style_expression_bodied_accessors = true:warning

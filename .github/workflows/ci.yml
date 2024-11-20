@@ -1,0 +1,49 @@
+name: CI
+on: [ push, pull_request ]
+jobs:
+  CI:
+    runs-on: ${{ matrix.os }}
+    container: ${{ matrix.container }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            container: mcr.microsoft.com/dotnet/sdk:8.0-bookworm-slim
+            script: ./build.sh
+          - os: ubuntu-22.04
+            container: rockylinux:8
+            script: ./build.sh
+          - os: ubuntu-22.04
+            container: mcr.microsoft.com/dotnet/sdk:8.0-alpine3.18
+            script: ./build.sh
+          # TODO(kleisauke): Re-enable Mono CI when C# 9 features are supported.
+          # - os: ubuntu-22.04
+          #   script: ./build/test-mono.sh
+          #   allow_failures: true
+          - os: macos-12
+            script: ./build.sh
+          - os: windows-2022
+            script: .\build.ps1
+    steps:
+      - name: Dependencies (Debian 12)
+        if: contains(matrix.container, 'bookworm')
+        run: |
+          apt-get update
+          apt-get install -y fontconfig-config
+      - name: Dependencies (Rocky Linux 8)
+        if: contains(matrix.container, 'rockylinux')
+        run: dnf install -y dotnet-sdk-8.0 google-noto-sans-fonts which
+      - name: Dependencies (Alpine 3.18)
+        if: contains(matrix.container, 'alpine')
+        run: apk add bash font-noto --update-cache
+      - name: Setup dotnet (macOS 12, Windows 2022)
+        if: runner.os != 'Linux'
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.x
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Test
+        continue-on-error: ${{ matrix.allow_failures == true }}
+        run: ${{ matrix.script }}
